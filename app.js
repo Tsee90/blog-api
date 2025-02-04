@@ -12,6 +12,8 @@ app.use(express.urlencoded({ extended: true }));
 
 const indexRouter = require('./src/routes/indexRouter');
 app.use('/', indexRouter);
+const postRouter = require('./src/routes/postRouter');
+app.use('/post', postRouter);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

@@ -9,5 +9,6 @@ indexRouter.get(
   passport.authenticate('jwt', { session: false }),
   indexController.getSecure
 );
+indexRouter.post('/signup', indexController.signup);
 
 module.exports = indexRouter;

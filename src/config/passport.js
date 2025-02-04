@@ -12,7 +12,6 @@ passport.use(
   new JwtStrategy(opts, async function (jwt_payload, done) {
     try {
       // Query PostgreSQL to find the user by ID
-      console.log(jwt_payload);
       const user = await db.getUserById(jwt_payload.id);
 
       if (!user) {
