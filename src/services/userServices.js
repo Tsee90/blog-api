@@ -7,7 +7,6 @@ exports.getUserByEmail = async (email) => {
     const user = await prisma.user.findUnique({
       where: { email },
     });
-    console.log(user);
     return user;
   } catch (err) {
     return err;
@@ -27,13 +26,42 @@ exports.getUserById = async (id) => {
 
 exports.createUser = async (email, password) => {
   try {
-    const user = await prisma.user.create({
+    return await prisma.user.create({
       data: {
         email,
         password,
       },
     });
-    return user;
+  } catch (err) {
+    return err;
+  }
+};
+
+exports.updateUserPassword = async (id, password) => {
+  try {
+    return await prisma.user.update({
+      where: { id },
+      data: { password },
+    });
+  } catch (err) {
+    return err;
+  }
+};
+
+exports.updateUserEmail = async (id, email) => {
+  try {
+    return await prisma.user.update({
+      where: { id },
+      data: { email },
+    });
+  } catch (err) {
+    return err;
+  }
+};
+
+exports.deleteUser = async (id) => {
+  try {
+    return await prisma.user.delete({ where: id });
   } catch (err) {
     return err;
   }

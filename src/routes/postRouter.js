@@ -1,12 +1,48 @@
 const { Router } = require('express');
 const postRouter = Router();
 const postController = require('../controllers/postController');
-const passport = require('../config/passport');
+const passportJWT = require('../config/passport-jwt');
 
 postRouter.post(
   '/',
-  passport.authenticate('jwt', { session: false }),
-  postController.post
+  passportJWT.authenticate('jwt', { session: false }),
+  postController.createPost
+);
+
+postRouter.get(
+  '/',
+  passportJWT.authenticate('jwt', { session: false }),
+  postController.getAllPosts
+);
+
+postRouter.get(
+  '/published',
+  passportJWT.authenticate('jwt', { session: false }),
+  postController.getAllPublishedPosts
+);
+
+postRouter.get(
+  '/:postId',
+  passportJWT.authenticate('jwt', { session: false }),
+  postController.getPost
+);
+
+postRouter.delete(
+  '/:postId',
+  passportJWT.authenticate('jwt', { session: false }),
+  postController.deletePost
+);
+
+postRouter.patch(
+  '/:postId',
+  passportJWT.authenticate('jwt', { session: false }),
+  postController.updatePost
+);
+
+postRouter.patch(
+  '/:postId/:published',
+  passportJWT.authenticate('jwt', { session: false }),
+  postController.publishPost
 );
 
 module.exports = postRouter;

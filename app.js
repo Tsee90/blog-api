@@ -10,10 +10,12 @@ dotenv.config({ path: `.env.${environment}` });
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-const indexRouter = require('./src/routes/indexRouter');
-app.use('/', indexRouter);
+const userRouter = require('./src/routes/userRouter');
+app.use('/users', userRouter);
 const postRouter = require('./src/routes/postRouter');
-app.use('/post', postRouter);
+app.use('/posts', postRouter);
+const commentRouter = require('./src/routes/commentRouter');
+app.use('/posts/:postId/comments', commentRouter);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
