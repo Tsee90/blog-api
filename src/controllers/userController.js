@@ -17,6 +17,7 @@ exports.signup = async (req, res) => {
 };
 
 exports.login = async (req, res, next) => {
+  console.log('logging in...');
   passportLocal.authenticate('local', { session: false }, (err, user, info) => {
     if (err || !user) {
       return res.status(401).json({ message: 'Invalid credentials' });
@@ -30,10 +31,10 @@ exports.login = async (req, res, next) => {
 
 exports.updatePassword = async (req, res) => {
   try {
-    const { id } = req.params;
+    const { userId } = req.params;
     const { password } = req.body;
     const hashedPassword = await bcrypt.hash(password, 10);
-    await db.updateUserPassword(id, hashedPassword);
+    await db.updateUserPassword(userId, hashedPassword);
     return res.json({ message: 'Password updated successfully' });
   } catch (err) {
     return res
@@ -44,9 +45,9 @@ exports.updatePassword = async (req, res) => {
 
 exports.updateEmail = async (req, res) => {
   try {
-    const { id } = req.params;
+    const { userId } = req.params;
     const { email } = req.body;
-    const updatedUser = await db.updateUserEmail(id, email);
+    const updatedUser = await db.updateUserEmail(userId, email);
     return res.json({
       message: 'Email updated successfully',
       user: updatedUser,
@@ -60,13 +61,13 @@ exports.updateEmail = async (req, res) => {
 
 exports.delete = async (req, res) => {
   try {
-    const { id } = req.params;
-    if (req.user.id !== id) {
+    const { userId } = req.params;
+    if (req.user.id !== userId) {
       return res
         .status(403)
         .json({ message: 'Not authorized to delete this user' });
     }
-    await db.deleteUser(id);
+    await db.deleteUser(userId);
     return res.status(204).send();
   } catch (err) {
     return res
@@ -77,8 +78,8 @@ exports.delete = async (req, res) => {
 
 exports.getUser = async (req, res) => {
   try {
-    const { id } = req.params;
-    const user = await db.getUserById(id);
+    const { userId } = req.params;
+    const user = await db.getUserById(userId);
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }

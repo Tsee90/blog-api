@@ -39,6 +39,7 @@ exports.createUser = async (email, password) => {
 
 exports.updateUserPassword = async (id, password) => {
   try {
+    const user = await this.getUserById(id);
     return await prisma.user.update({
       where: { id },
       data: { password },
