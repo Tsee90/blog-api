@@ -1,3 +1,4 @@
+const { post } = require('../routes/userRouter');
 const db = require('../services/postServices');
 
 exports.createPost = async (req, res) => {
@@ -14,9 +15,9 @@ exports.createPost = async (req, res) => {
 
 exports.updatePost = async (req, res) => {
   try {
-    const { id } = req.params;
+    const { postId } = req.params;
     const { title, content } = req.body;
-    const updatedPost = await db.updatePostContent(id, title, content);
+    const updatedPost = await db.updatePostContent(postId, title, content);
     return res.json({
       message: 'Post updated successfully',
       post: updatedPost,
@@ -30,8 +31,8 @@ exports.updatePost = async (req, res) => {
 
 exports.deletePost = async (req, res) => {
   try {
-    const { id } = req.params;
-    await db.deletePost(id);
+    const { postId } = req.params;
+    await db.deletePost(postId);
     return res.status(204).send();
   } catch (err) {
     return res
@@ -42,8 +43,8 @@ exports.deletePost = async (req, res) => {
 
 exports.getPost = async (req, res) => {
   try {
-    const { id } = req.params;
-    const post = await db.getPostById(id);
+    const { postId } = req.params;
+    const post = await db.getPostById(postId);
     if (!post) {
       return res.status(404).json({ message: 'Post not found' });
     }
@@ -79,9 +80,9 @@ exports.getAllPosts = async (req, res) => {
 
 exports.publishPost = async (req, res) => {
   try {
-    const { id } = req.params;
+    const { postId } = req.params;
     const { published } = req.body;
-    const updatedPost = await db.publishPost(id, published);
+    const updatedPost = await db.publishPost(postId, published);
     return res.json({
       message: `Post ${published ? 'published' : 'unpublished'} successfully`,
       post: updatedPost,

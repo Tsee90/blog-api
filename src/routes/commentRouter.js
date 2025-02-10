@@ -1,9 +1,9 @@
 const { Router } = require('express');
-const commentRouter = Router();
+const commentRouter = Router({ mergeParams: true });
 const commentController = require('../controllers/commentController');
 const passportJWT = require('../config/passport-jwt');
 
-commentRouter.get('/:id', commentController.getCommentById);
+commentRouter.get('/:commentId', commentController.getCommentById);
 
 commentRouter.post(
   '/',
@@ -12,13 +12,13 @@ commentRouter.post(
 );
 
 commentRouter.patch(
-  '/:id',
+  '/:commentId',
   passportJWT.authenticate('jwt', { session: false }),
   commentController.updateCommentContent
 );
 
 commentRouter.delete(
-  '/:id',
+  '/:commentId',
   passportJWT.authenticate('jwt', { session: false }),
   commentController.deleteComment
 );

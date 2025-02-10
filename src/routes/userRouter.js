@@ -8,25 +8,25 @@ userRouter.post('/login', userController.login);
 userRouter.post('/signup', userController.signup);
 
 userRouter.get(
-  '/:userId',
+  '/',
   passportJWT.authenticate('jwt', { session: false }),
   userController.getUser
 );
 
 userRouter.delete(
-  '/:userId',
+  '/',
   passportJWT.authenticate('jwt', { session: false }),
   userController.delete
 );
 
 userRouter.patch(
-  '/:userId/email',
+  '/email',
   passportJWT.authenticate('jwt', { session: false }),
   userController.updateEmail
 );
 
 userRouter.patch(
-  '/:userId/password',
+  '/password',
   passportJWT.authenticate('jwt', { session: false }),
   userController.updatePassword
 );

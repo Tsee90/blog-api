@@ -62,7 +62,7 @@ exports.updateUserEmail = async (id, email) => {
 
 exports.deleteUser = async (id) => {
   try {
-    return await prisma.user.delete({ where: id });
+    return await prisma.user.delete({ where: { id } });
   } catch (err) {
     return err;
   }

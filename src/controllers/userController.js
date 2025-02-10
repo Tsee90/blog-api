@@ -22,7 +22,7 @@ exports.login = async (req, res, next) => {
     if (err || !user) {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
-    const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, {
+    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
       expiresIn: '1h',
     });
     return res.json({ token, user });
@@ -31,8 +31,10 @@ exports.login = async (req, res, next) => {
 
 exports.updatePassword = async (req, res) => {
   try {
-    const { userId } = req.params;
+    console.log('req.user:', req.user);
+    const userId = req.user.id;
     const { password } = req.body;
+    console.log(userId, password);
     const hashedPassword = await bcrypt.hash(password, 10);
     await db.updateUserPassword(userId, hashedPassword);
     return res.json({ message: 'Password updated successfully' });
@@ -45,7 +47,7 @@ exports.updatePassword = async (req, res) => {
 
 exports.updateEmail = async (req, res) => {
   try {
-    const { userId } = req.params;
+    const userId = req.user.id;
     const { email } = req.body;
     const updatedUser = await db.updateUserEmail(userId, email);
     return res.json({
@@ -61,13 +63,13 @@ exports.updateEmail = async (req, res) => {
 
 exports.delete = async (req, res) => {
   try {
-    const { userId } = req.params;
-    if (req.user.id !== userId) {
+    if (!req.user.id) {
       return res
         .status(403)
         .json({ message: 'Not authorized to delete this user' });
     }
-    await db.deleteUser(userId);
+    console.log(req.user.id);
+    await db.deleteUser(req.user.id);
     return res.status(204).send();
   } catch (err) {
     return res
@@ -78,7 +80,7 @@ exports.delete = async (req, res) => {
 
 exports.getUser = async (req, res) => {
   try {
-    const { userId } = req.params;
+    const userId = req.user.id;
     const user = await db.getUserById(userId);
     if (!user) {
       return res.status(404).json({ message: 'User not found' });

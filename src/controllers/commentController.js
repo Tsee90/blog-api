@@ -6,6 +6,8 @@ exports.createComment = async (req, res) => {
     const { content } = req.body;
     const userId = req.user.id;
 
+    console.log(postId, content, userId);
+
     const newComment = await db.createComment(postId, userId, content);
     return res.status(201).json(newComment);
   } catch (err) {
@@ -17,8 +19,8 @@ exports.createComment = async (req, res) => {
 
 exports.getCommentById = async (req, res) => {
   try {
-    const { id } = req.params;
-    const comment = await db.getCommentById(id);
+    const { commentId } = req.params;
+    const comment = await db.getCommentById(commentId);
     if (!comment) {
       return res.status(404).json({ message: 'Comment not found' });
     }
@@ -32,11 +34,11 @@ exports.getCommentById = async (req, res) => {
 
 exports.updateCommentContent = async (req, res) => {
   try {
-    const { id } = req.params;
+    const { commentId } = req.params;
     const { content } = req.body;
     const userId = req.user.id;
 
-    const comment = await db.getCommentById(id);
+    const comment = await db.getCommentById(commentId);
     if (!comment || comment.userId !== userId) {
       return res
         .status(403)
@@ -57,10 +59,10 @@ exports.updateCommentContent = async (req, res) => {
 
 exports.deleteComment = async (req, res) => {
   try {
-    const { id } = req.params;
+    const { commentId } = req.params;
     const userId = req.user.id;
 
-    const comment = await db.getCommentById(id);
+    const comment = await db.getCommentById(commentId);
     if (!comment) {
       return res.status(404).json({ message: 'Comment not found' });
     }
@@ -71,7 +73,7 @@ exports.deleteComment = async (req, res) => {
         .json({ message: 'Not authorized to delete this comment' });
     }
 
-    await db.deleteComment(id);
+    await db.deleteComment(commentId);
     return res.status(204).send();
   } catch (err) {
     return res

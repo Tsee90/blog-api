@@ -6,7 +6,6 @@ const bcrypt = require('bcryptjs');
 passport.use(
   new LocalStrategy(async (username, password, done) => {
     try {
-      console.log('Checking user...', username, password);
       const user = await db.getUserByEmail(username);
 
       if (!user) {

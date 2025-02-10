@@ -38,7 +38,7 @@ exports.updateCommentContent = async (id, content) => {
 
 exports.deleteComment = async (id) => {
   try {
-    return await prisma.comment.delete({ where: id });
+    return await prisma.comment.delete({ where: { id } });
   } catch (err) {
     return err;
   }

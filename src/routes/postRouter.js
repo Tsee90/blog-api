@@ -2,6 +2,7 @@ const { Router } = require('express');
 const postRouter = Router();
 const postController = require('../controllers/postController');
 const passportJWT = require('../config/passport-jwt');
+const commentRouter = require('./commentRouter');
 
 postRouter.post(
   '/',
@@ -44,5 +45,7 @@ postRouter.patch(
   passportJWT.authenticate('jwt', { session: false }),
   postController.publishPost
 );
+
+postRouter.use('/:postId/comments', commentRouter);
 
 module.exports = postRouter;
