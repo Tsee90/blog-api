@@ -37,7 +37,6 @@ exports.updateCommentContent = async (req, res) => {
     const { commentId } = req.params;
     const { content } = req.body;
     const userId = req.user.id;
-
     const comment = await db.getCommentById(commentId);
     if (!comment || comment.userId !== userId) {
       return res
@@ -45,7 +44,7 @@ exports.updateCommentContent = async (req, res) => {
         .json({ message: 'Not authorized to edit this comment' });
     }
 
-    const updatedComment = await db.updateCommentContent(id, content);
+    const updatedComment = await db.updateCommentContent(comment.id, content);
     return res.json({
       message: 'Comment updated successfully',
       comment: updatedComment,

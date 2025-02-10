@@ -16,11 +16,7 @@ postRouter.get(
   postController.getAllPosts
 );
 
-postRouter.get(
-  '/published',
-  passportJWT.authenticate('jwt', { session: false }),
-  postController.getAllPublishedPosts
-);
+postRouter.get('/published', postController.getAllPublishedPosts);
 
 postRouter.get(
   '/:postId',
